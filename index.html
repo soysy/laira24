@@ -27,7 +27,6 @@
     <style>
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: #163300;
             -webkit-tap-highlight-color: transparent;
             -webkit-user-select: none;
             -ms-user-select: none;
@@ -191,39 +190,6 @@
                 transform: translateY(-10px);
             }
         }
-
-        /* Desktop Background Enhancement */
-        @media (min-width: 768px) {
-            body {
-                background-color: #020b00;
-                background-image:
-                    radial-gradient(circle at 15% 50%, rgba(46, 208, 110, 0.08), transparent 25%),
-                    radial-gradient(circle at 85% 30%, rgba(159, 232, 112, 0.05), transparent 25%),
-                    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-                background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
-                background-position: 0 0, 0 0, center center, center center;
-                background-attachment: fixed;
-            }
-        }
-
-        /* Scrollbar Styling for Desktop */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #020b00;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #1f3d05;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #2ed06e;
-        }
     </style>
 
     <script>
@@ -246,7 +212,7 @@
     </script>
 </head>
 
-<body class="text-gray-900 transition-colors duration-300" oncontextmenu="return false;">
+<body class="bg-gray-100 text-gray-900 transition-colors duration-300" oncontextmenu="return false;">
     <div id="root"></div>
 
     <script>
@@ -965,8 +931,8 @@
             );
         };
 
-        const SplashScreen = ({ fading }) => (
-            <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#020b00] overflow-hidden transition-opacity duration-700 ${fading ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+        const SplashScreen = () => (
+            <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#020b00] overflow-hidden">
                 <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,_#163300_0%,_transparent_50%)] animate-pulse" style={{ animationDuration: '4s' }}></div>
 
                 <div className="relative z-10 flex flex-col items-center animate-in fade-in zoom-in duration-1000">
@@ -1007,8 +973,7 @@
                 // Progress Bar Animation
                 setProgress(0);
                 const progressInterval = setInterval(() => {
-                    // 7 seconds = 7000ms. Interval 100ms. Steps = 70. Increment = 100/70.
-                    setProgress(old => Math.min(old + (100 / 70), 100));
+                    setProgress(old => Math.min(old + (100 / 50), 100)); // 50 steps of 100ms = 5000ms
                 }, 100);
 
                 const cycleInterval = setInterval(() => {
@@ -1018,7 +983,7 @@
                         setIsVisible(true); // Fade in
                         setProgress(0);
                     }, 500); // 0.5s transition
-                }, 7000); // 7s per slide
+                }, 5000); // 5s per slide
 
                 return () => {
                     clearInterval(cycleInterval);
@@ -1036,40 +1001,36 @@
             const isUp = currency.stats.direction === 'up';
             const isDown = currency.stats.direction === 'down';
 
-            // Dynamic Colors based on trend - ENHANCED VISUALS
+            // Dynamic Colors based on trend
+            const themeColor = isUp ? 'emerald' : isDown ? 'rose' : 'gray';
             const bgGradient = isUp
-                ? 'from-emerald-500/20 via-emerald-500/5 to-transparent'
+                ? 'from-emerald-500/10 to-emerald-500/5'
                 : isDown
-                    ? 'from-rose-500/20 via-rose-500/5 to-transparent'
-                    : 'from-gray-500/20 via-gray-500/5 to-transparent';
+                    ? 'from-rose-500/10 to-rose-500/5'
+                    : 'from-gray-500/10 to-gray-500/5';
 
-            const borderColor = isUp ? 'border-emerald-500/30' : isDown ? 'border-rose-500/30' : 'border-gray-500/30';
+            const borderColor = isUp ? 'border-emerald-500/20' : isDown ? 'border-rose-500/20' : 'border-gray-500/20';
             const textColor = isUp ? 'text-emerald-500' : isDown ? 'text-rose-500' : 'text-gray-500';
-            const statusBg = isUp ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : isDown ? 'bg-rose-100 text-rose-700 border-rose-200' : 'bg-gray-100 text-gray-600 border-gray-200';
-            const shadowClass = isUp ? 'shadow-emerald-500/10' : isDown ? 'shadow-rose-500/10' : 'shadow-gray-500/10';
 
             return (
-                <div className="mb-8 relative">
-                    <div className={`relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br ${bgGradient} border ${borderColor} backdrop-blur-xl transition-all duration-500 shadow-2xl ${shadowClass}`}>
+                <div className="mb-6 relative">
+                    <div className={`relative overflow-hidden rounded-[2rem] bg-gradient-to-br ${bgGradient} border ${borderColor} backdrop-blur-sm transition-all duration-500`}>
                         {/* Progress Bar Top */}
-                        <div className="absolute top-0 left-0 h-1.5 bg-gray-200 dark:bg-gray-700 w-full opacity-30">
-                            <div className={`h-full ${isUp ? 'bg-emerald-500' : isDown ? 'bg-rose-500' : 'bg-brand-primary'} transition-all duration-100 ease-linear shadow-[0_0_15px_currentColor]`} style={{ width: `${progress}%` }}></div>
+                        <div className="absolute top-0 left-0 h-1 bg-gray-200 dark:bg-gray-700 w-full opacity-30">
+                            <div className={`h-full ${isUp ? 'bg-emerald-500' : isDown ? 'bg-rose-500' : 'bg-brand-primary'} transition-all duration-100 ease-linear`} style={{ width: `${progress}%` }}></div>
                         </div>
 
-                        {/* Background Decor */}
-                        <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-current opacity-5 blur-3xl rounded-full"></div>
-
-                        <div className={`p-7 transition-all duration-500 ease-in-out ${isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95'}`}>
-                            <div className="flex justify-between items-start mb-6">
-                                <div className="flex items-center gap-5">
-                                    <div className={`w-16 h-16 rounded-2xl bg-white dark:bg-gray-800 shadow-lg flex items-center justify-center text-4xl border border-white/20 dark:border-gray-700`}>
+                        <div className={`p-6 transition-all duration-500 ease-in-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                            <div className="flex justify-between items-start mb-4">
+                                <div className="flex items-center gap-4">
+                                    <div className={`w-14 h-14 rounded-2xl bg-white dark:bg-gray-800 shadow-sm flex items-center justify-center text-3xl border ${borderColor}`}>
                                         {flag}
                                     </div>
                                     <div>
-                                        <h3 className="text-2xl font-black text-gray-800 dark:text-white leading-none mb-2 tracking-tight">{currency.name}</h3>
+                                        <h3 className="text-xl font-black text-gray-800 dark:text-white leading-none mb-1">{currency.name}</h3>
                                         <div className="flex items-center gap-2">
-                                            <span className="text-xs font-bold text-gray-400 font-mono tracking-wider bg-white/50 dark:bg-black/20 px-2 py-0.5 rounded text-center min-w-[3rem]">{currency.code}</span>
-                                            <span className={`px-2.5 py-0.5 rounded-lg text-[10px] font-black flex items-center gap-1 border ${statusBg} shadow-sm`}>
+                                            <span className="text-xs font-bold text-gray-400 font-mono tracking-wider">{currency.code}</span>
+                                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-black flex items-center gap-1 ${isUp ? 'bg-emerald-100 text-emerald-700' : isDown ? 'bg-rose-100 text-rose-700' : 'bg-gray-100 text-gray-600'}`}>
                                                 {currency.stats.percent}% {isUp ? '↑' : isDown ? '↓' : '-'}
                                             </span>
                                         </div>
@@ -1077,28 +1038,22 @@
                                 </div>
 
                                 {/* Status Indicator Pulse */}
-                                <div className="relative mt-2">
-                                    <div className={`w-4 h-4 rounded-full ${isUp ? 'bg-emerald-500' : isDown ? 'bg-rose-500' : 'bg-gray-400'} animate-ping absolute inset-0 opacity-75`}></div>
-                                    <div className={`w-4 h-4 rounded-full ${isUp ? 'bg-emerald-500' : isDown ? 'bg-rose-500' : 'bg-gray-400'} shadow-lg shadow-current relative z-10 border-2 border-white dark:border-gray-800`}></div>
-                                </div>
+                                <div className={`w-3 h-3 rounded-full ${isUp ? 'bg-emerald-500' : isDown ? 'bg-rose-500' : 'bg-gray-400'} animate-pulse shadow-lg shadow-current`}></div>
                             </div>
 
                             <div className="grid grid-cols-[1.5fr_1fr] gap-4 items-end">
                                 {/* Buy Price - Prominent */}
                                 <div className="flex flex-col">
-                                    <span className={`text-sm font-bold mb-1 opacity-90 ${textColor} flex items-center gap-2`}>
-                                        <span className={`w-2 h-2 rounded-full ${isUp ? 'bg-emerald-500' : isDown ? 'bg-rose-500' : 'bg-gray-500'}`}></span>
-                                        سعر الشراء
-                                    </span>
-                                    <div className={`text-5xl font-black num-en tracking-tighter ${textColor} drop-shadow-sm`}>
+                                    <span className={`text-xs font-bold mb-1 opacity-80 ${textColor}`}>سعر الشراء</span>
+                                    <div className={`text-4xl font-black num-en tracking-tighter ${textColor} drop-shadow-sm`}>
                                         {parseFloat(currency.buy_price).toLocaleString('en-US')}
                                     </div>
                                 </div>
 
                                 {/* Sell Price - Smaller */}
-                                <div className="flex flex-col items-end pb-2">
-                                    <span className="text-[11px] font-bold text-gray-400 mb-1">سعر المبيع</span>
-                                    <div className="text-2xl font-bold num-en text-gray-600 dark:text-gray-300 opacity-90">
+                                <div className="flex flex-col items-end pb-1">
+                                    <span className="text-[10px] font-bold text-gray-400 mb-1">سعر المبيع</span>
+                                    <div className="text-xl font-bold num-en text-gray-600 dark:text-gray-300">
                                         {parseFloat(currency.sell_price).toLocaleString('en-US')}
                                     </div>
                                 </div>
@@ -1112,7 +1067,6 @@
         // --- Main App ---
         function App() {
             const [showSplash, setShowSplash] = useState(true);
-            const [splashFading, setSplashFading] = useState(false);
             const [activeTab, setActiveTab] = useState('home');
             const [currencyData, setCurrencyData] = useState([]);
             const [globalRawData, setGlobalRawData] = useState(null);
@@ -1208,10 +1162,7 @@
             const dragItem = useRef();
             const dragOverItem = useRef();
 
-            useEffect(() => {
-                setTimeout(() => setSplashFading(true), 2500);
-                setTimeout(() => setShowSplash(false), 3200);
-            }, []);
+            useEffect(() => { setTimeout(() => setShowSplash(false), 3000); }, []);
             useEffect(() => { localStorage.setItem('pinnedCurrencies', JSON.stringify(pinned)); }, [pinned]);
             useEffect(() => { localStorage.setItem('goldOrder', JSON.stringify(goldOrder)); }, [goldOrder]);
             useEffect(() => { localStorage.setItem('showGoldOnHome', showGold); }, [showGold]);
@@ -2270,9 +2221,9 @@
             );
 
             return (
-                <div className="min-h-screen bg-gray-100 dark:bg-gray-900 max-w-md mx-auto relative shadow-2xl overflow-hidden md:border-x md:border-white/5">
+                <div className="min-h-screen bg-gray-100 dark:bg-gray-900 max-w-md mx-auto relative shadow-2xl overflow-hidden">
                     <InstallPrompt />
-                    {showSplash && <SplashScreen fading={splashFading} />}
+                    {showSplash && <SplashScreen />}
 
                     {activeTab === 'home' && renderHome()}
                     {activeTab === 'gold' && renderGold()}
