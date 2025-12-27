@@ -257,14 +257,8 @@
             try {
                 const url = `${SUPABASE_URL}/rest/v1/${viewName}?select=*`;
                 const res = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        "apikey": ANON_KEY,
-                        "Authorization": "Bearer " + ANON_KEY,
-                        "Cache-Control": "no-cache",
-                        "Pragma": "no-cache"
-                    },
-                    cache: 'no-store'
+                    headers: { "apikey": ANON_KEY, "Authorization": "Bearer " + ANON_KEY },
+                    cache: 'reload'
                 });
                 if (!res.ok) return [];
                 return await res.json();
@@ -1202,17 +1196,6 @@
             useEffect(() => { localStorage.setItem('globalOrder', JSON.stringify(globalOrder)); }, [globalOrder]);
 
             useEffect(() => { loadData(); }, []);
-
-            // Auto-refresh when app comes to foreground
-            useEffect(() => {
-                const handleVisibilityChange = () => {
-                    if (document.visibilityState === 'visible') {
-                        loadData();
-                    }
-                };
-                document.addEventListener('visibilitychange', handleVisibilityChange);
-                return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-            }, []);
             useEffect(() => { if (goldData.length > 0 && !selectedGoldId) setSelectedGoldId(goldData[0].id || goldData[0].description); }, [goldData]);
 
             useEffect(() => {
