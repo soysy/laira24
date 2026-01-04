@@ -56,6 +56,249 @@
             scrollbar-width: none;
         }
 
+        /* Modern Smooth Animations */
+        @keyframes blob-bounce {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+        }
+
+        @keyframes drift {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animate-blob {
+            animation: blob-bounce 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .dark .glass-card {
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Enhanced Glows */
+        .card-glow-up {
+            box-shadow: 0 0 20px -5px rgba(16, 185, 129, 0.3);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .card-glow-down {
+            box-shadow: 0 0 20px -5px rgba(244, 63, 94, 0.3);
+            border-color: rgba(244, 63, 94, 0.4);
+        }
+
+        /* Modern Background Mesh & Noise */
+        .mesh-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -50;
+            overflow: hidden;
+            background: #f0fdf4;
+            /* Very light mint base for day */
+            perspective: 1000px;
+        }
+
+        .dark .mesh-bg {
+            background: #020617;
+            /* Deepest Slate */
+        }
+
+        /* Moving Cyber Grid */
+        .mesh-bg::before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-image:
+                linear-gradient(rgba(46, 208, 110, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(46, 208, 110, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            transform: rotateX(45deg) rotateZ(0deg);
+            animation: grid-spin 120s linear infinite;
+            opacity: 0.6;
+        }
+
+        .dark .mesh-bg::before {
+            background-image:
+                linear-gradient(rgba(46, 208, 110, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(46, 208, 110, 0.08) 1px, transparent 1px);
+        }
+
+        @keyframes grid-spin {
+            0% {
+                transform: rotateX(45deg) rotateZ(0deg) translateY(0);
+            }
+
+            100% {
+                transform: rotateX(45deg) rotateZ(360deg) translateY(50px);
+            }
+        }
+
+        .mesh-bg::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E");
+            opacity: 0.08;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .dark .mesh-bg {
+            background: #020408;
+        }
+
+        .dark .mesh-bg::after {
+            opacity: 0.07;
+        }
+
+        /* 4. Elegant Orbs (Aurora Effect) */
+        .mesh-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            mix-blend-mode: multiply;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .dark .mesh-blob {
+            mix-blend-mode: screen;
+            opacity: 0.25;
+            filter: blur(100px);
+        }
+
+        /* Primary Orb */
+        .mesh-blob-1 {
+            top: -10%;
+            left: -10%;
+            width: 70vw;
+            height: 70vw;
+            background: radial-gradient(circle, #4ade80 0%, transparent 70%);
+            animation-delay: 0s;
+        }
+
+        /* Secondary Orb */
+        .mesh-blob-2 {
+            bottom: -20%;
+            right: -20%;
+            width: 80vw;
+            height: 80vh;
+            background: radial-gradient(circle, #22c55e 0%, transparent 70%);
+            animation-delay: -5s;
+        }
+
+        /* Accent Orb */
+        .mesh-blob-3 {
+            top: 40%;
+            left: 30%;
+            width: 60vw;
+            height: 60vh;
+            background: radial-gradient(circle, #15803d 0%, transparent 70%);
+            animation: pulse-move 25s infinite alternate;
+            opacity: 0.2;
+        }
+
+        /* Fourth Orb (Reused) */
+        .mesh-blob-4 {
+            top: 10%;
+            right: 10%;
+            width: 40vw;
+            height: 40vh;
+            background: radial-gradient(circle, #86efac 0%, transparent 70%);
+            opacity: 0.3;
+            animation-delay: -8s;
+        }
+
+        .dark .mesh-blob-1 {
+            background: radial-gradient(circle, #10b981 0%, transparent 70%);
+            opacity: 0.3;
+        }
+
+        .dark .mesh-blob-2 {
+            background: radial-gradient(circle, #059669 0%, transparent 70%);
+            opacity: 0.3;
+        }
+
+        .dark .mesh-blob-3 {
+            background: radial-gradient(circle, #047857 0%, transparent 70%);
+            opacity: 0.2;
+        }
+
+        .dark .mesh-blob-4 {
+            background: radial-gradient(circle, #34d399 0%, transparent 70%);
+            opacity: 0.2;
+        }
+
+        @keyframes pulse-move {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.2;
+            }
+
+            50% {
+                transform: translate(30px, -40px) scale(1.1);
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translate(-20px, 20px) scale(0.95);
+                opacity: 0.2;
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0px, 0px) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(30px, -50px) rotate(10deg);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) rotate(-5deg);
+            }
+
+            100% {
+                transform: translate(0px, 0px) rotate(0deg);
+            }
+        }
+
         .transition-all-300 {
             transition: all 0.3s ease-in-out;
         }
@@ -76,31 +319,6 @@
             animation: slideDown 0.5s ease-out forwards;
         }
 
-        /* Animations */
-        @keyframes pulse-green {
-            0% {
-                background-color: rgba(16, 185, 129, 0.1);
-                border-color: rgba(16, 185, 129, 0.4);
-            }
-
-            100% {
-                background-color: transparent;
-                border-color: transparent;
-            }
-        }
-
-        @keyframes pulse-red {
-            0% {
-                background-color: rgba(244, 63, 94, 0.1);
-                border-color: rgba(244, 63, 94, 0.4);
-            }
-
-            100% {
-                background-color: transparent;
-                border-color: transparent;
-            }
-        }
-
         .chart-path {
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
@@ -111,62 +329,6 @@
             to {
                 stroke-dashoffset: 0;
             }
-        }
-
-        /* Card Glow Effects */
-        @keyframes glow-pulse-green {
-
-            0%,
-            100% {
-                border-color: rgba(16, 185, 129, 0.3);
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            }
-
-            50% {
-                border-color: #2ed06e;
-                box-shadow: 0 0 15px rgba(46, 208, 110, 0.5), inset 0 0 10px rgba(46, 208, 110, 0.1);
-            }
-        }
-
-        @keyframes glow-pulse-red {
-
-            0%,
-            100% {
-                border-color: rgba(244, 63, 94, 0.3);
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            }
-
-            50% {
-                border-color: #f43f5e;
-                box-shadow: 0 0 15px rgba(244, 63, 94, 0.5), inset 0 0 10px rgba(244, 63, 94, 0.1);
-            }
-        }
-
-        .card-glow-up {
-            animation: glow-pulse-green 3s infinite ease-in-out;
-        }
-
-        .card-glow-down {
-            animation: glow-pulse-red 3s infinite ease-in-out;
-        }
-
-        /* NavBar Glow */
-        @keyframes nav-pulse {
-
-            0%,
-            100% {
-                border-color: rgba(46, 208, 110, 0.1);
-                box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
-            }
-
-            50% {
-                border-color: rgba(46, 208, 110, 0.8);
-                box-shadow: 0 0 25px rgba(46, 208, 110, 0.4), inset 0 0 5px rgba(46, 208, 110, 0.05);
-            }
-        }
-
-        .nav-glow {
-            animation: nav-pulse 4s infinite ease-in-out;
         }
 
         @keyframes loading {
@@ -212,7 +374,7 @@
     </script>
 </head>
 
-<body class="bg-gray-100 text-gray-900 transition-colors duration-300" oncontextmenu="return false;">
+<body class="bg-transparent text-gray-900 transition-colors duration-300" oncontextmenu="return false;">
     <div id="root"></div>
 
     <script>
@@ -849,7 +1011,7 @@
                     onDragEnter={onDragEnter}
                     onDragEnd={onDragEnd}
                     onDragOver={(e) => e.preventDefault()}
-                    className={`group relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl p-4 mb-3 border shadow-sm transition-all duration-300 hover:-translate-y-1 cursor-pointer ${glowClass}`}
+                    className={`group relative overflow-hidden glass-card rounded-2xl p-4 mb-3 shadow-sm transition-all duration-300 hover:-translate-y-1 cursor-pointer ${glowClass}`}
                 >
                     <div className={`absolute inset-0 bg-gradient-to-br ${trendGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 dark:opacity-0`}></div>
 
@@ -914,7 +1076,7 @@
             const trendGradient = isUp ? 'from-emerald-50/50 to-transparent' : isDown ? 'from-rose-50/50 to-transparent' : '';
 
             return (
-                <div className={`group relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl p-4 mb-3 border shadow-sm transition-all duration-300 hover:-translate-y-1 ${activeGlowClass}`}>
+                <div className={`group relative overflow-hidden glass-card rounded-2xl p-4 mb-3 shadow-sm transition-all duration-300 hover:-translate-y-1 ${activeGlowClass}`}>
                     {/* Trend Background Gradient */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${trendGradient} opacity-0 ${isUp || isDown ? 'opacity-100' : 'group-hover:opacity-50'} transition-opacity duration-500 pointer-events-none dark:opacity-0`}></div>
 
@@ -1422,7 +1584,7 @@
             };
 
             const Header = ({ title, subtitle, time, showDate = true, showBack = false, onBack }) => (
-                <div className="relative z-10 mb-[-1.5rem] overflow-hidden rounded-b-[2.5rem] bg-[#163300] shadow-xl">
+                <div className="relative z-10 mb-[-1.5rem] overflow-hidden rounded-b-[2.5rem] bg-[#163300]/80 backdrop-blur-xl shadow-xl">
                     <div className="absolute inset-0 bg-gradient-to-br from-[#1a3c00] via-[#112700] to-[#0a1a00]"></div>
                     <div className="absolute -top-32 -right-32 w-64 h-64 bg-[#2ed06e] opacity-5 rounded-full blur-3xl"></div>
                     <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-[#9fe870] opacity-5 rounded-full blur-3xl"></div>
@@ -1611,7 +1773,7 @@
                                             );
                                         })}
                                     </div>
-                                    <div className="bg-white dark:bg-gray-800 rounded-[2rem] shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden relative animate-in fade-in slide-in-from-bottom-4 duration-700">
+                                    <div className="glass-card rounded-[2rem] shadow-xl overflow-hidden relative animate-in fade-in slide-in-from-bottom-4 duration-700">
                                         <div className="bg-brand-dark p-5 relative overflow-hidden">
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/10 rounded-full blur-2xl translate-x-10 -translate-y-10"></div>
                                             <h3 className="text-white font-bold text-lg flex items-center gap-2 relative z-10">
@@ -1699,7 +1861,7 @@
                     <div className="pb-24">
                         <Header title="الأسعار العالمية" subtitle="تحويل وحاسبة فورية" time={apiLastUpdate} />
                         <div className="px-4 pt-12">
-                            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-5 mb-8 relative overflow-hidden">
+                            <div className="glass-card rounded-2xl shadow-lg p-5 mb-8 relative overflow-hidden">
                                 <div className="absolute top-0 left-0 w-full h-1 bg-brand-primary"></div>
                                 <h3 className="text-sm font-bold text-gray-500 mb-4 flex items-center gap-2"><IconRenderer icon={Icons.Calculator} />حاسبة العملات العالمية</h3>
                                 <div className="flex gap-3 mb-4">
@@ -1766,7 +1928,7 @@
                     <div className="pb-24">
                         <Header title="الحاسبة والتحليل" subtitle="حساب دقيق لكافة العملات" time={dbLastUpdate} />
                         <div className="px-4 pt-12">
-                            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 border border-gray-100 dark:border-gray-700 mb-4">
+                            <div className="glass-card rounded-2xl shadow-sm p-6 mb-4">
 
                                 <div className="flex flex-col gap-4 mb-6">
                                     <div className="flex items-center justify-between">
@@ -1812,7 +1974,7 @@
                                 )}
                             </div>
                             {calcSource && (
-                                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <div className="glass-card rounded-2xl shadow-sm overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
                                     <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
                                         <div className="flex items-center gap-2"><div className={`p-1.5 rounded-lg ${isTrendUp ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}><IconRenderer icon={isTrendUp ? Icons.TrendUp : Icons.TrendDown} /></div><div><h3 className="font-bold text-sm dark:text-white">تحليل السعر</h3><p className="text-[10px] text-gray-400">{calcSource.name} ({calcMode === 'sell' ? 'مبيع' : 'شراء'})</p></div></div>
                                         <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-0.5">{['1D', '1W', '1M', '1Y'].map(tf => <button key={tf} onClick={() => setChartTimeframe(tf)} className={`px-3 py-1 text-xs font-bold rounded-md transition ${chartTimeframe === tf ? 'bg-white dark:bg-gray-600 shadow text-brand-primary' : 'text-gray-400 hover:text-gray-600'}`}>{tf === '1D' ? 'يوم' : tf === '1W' ? 'أسبوع' : tf === '1M' ? 'شهر' : 'سنة'}</button>)}</div>
@@ -1834,7 +1996,7 @@
                     <Header title="الإعدادات" subtitle="تخصيص التطبيق" time={null} showDate={false} showBack={true} onBack={() => setActiveTab('home')} />
                     <div className="px-4 pt-12 space-y-4">
 
-                        <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div className="glass-card rounded-2xl p-4 shadow-sm">
                             <div className="flex items-center gap-3 mb-4">
                                 <div className={`w-10 h-10 rounded-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-500`}>
                                     <IconRenderer icon={Icons.Moon} />
@@ -1866,7 +2028,7 @@
                             )}
                         </div>
 
-                        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                        <div className="glass-card rounded-2xl shadow-sm overflow-hidden transition-all duration-300">
                             <button
                                 onClick={() => setIsCustomizeOpen(!isCustomizeOpen)}
                                 className="w-full p-4 flex items-center justify-between bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
@@ -1985,7 +2147,7 @@
                             </div>
                         </div>
 
-                        <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 mt-4">
+                        <div className="glass-card rounded-2xl p-5 shadow-sm mt-4">
                             <h3 className="font-bold mb-4 flex items-center gap-2 text-gray-800 dark:text-white text-sm">
                                 <span className="w-8 h-8 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center"><IconRenderer icon={Icons.Send} /></span>
                                 تواصل معنا
@@ -2133,7 +2295,7 @@
                 };
 
                 return (
-                    <div className="fixed inset-0 bg-gray-50 dark:bg-gray-900 z-50 flex flex-col animate-in fade-in duration-300 overflow-y-auto no-scrollbar">
+                    <div className="fixed inset-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-md z-50 flex flex-col animate-in fade-in duration-300 overflow-y-auto no-scrollbar">
                         {/* Header */}
                         <div className="flex justify-between items-center p-6 sticky top-0 bg-gray-50/90 dark:bg-gray-900/90 backdrop-blur-md z-30 shadow-sm dark:shadow-none">
                             <div>
@@ -2398,7 +2560,8 @@
             );
 
             return (
-                <div className="min-h-screen bg-gray-100 dark:bg-gray-900 max-w-md mx-auto relative shadow-2xl overflow-hidden">
+                <div className="min-h-screen bg-transparent max-w-md mx-auto relative shadow-2xl overflow-hidden">
+                    <div className="mesh-bg"><div className="mesh-blob mesh-blob-1"></div><div className="mesh-blob mesh-blob-2"></div><div className="mesh-blob mesh-blob-3"></div><div className="mesh-blob mesh-blob-4"></div></div>
                     <InstallPrompt />
                     {showSplash && <SplashScreen />}
 
