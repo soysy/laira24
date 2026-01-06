@@ -1012,7 +1012,7 @@
                     onDragEnter={onDragEnter}
                     onDragEnd={onDragEnd}
                     onDragOver={(e) => e.preventDefault()}
-                    className={`group relative overflow-hidden glass-card rounded-2xl p-3.5 sm:p-4 mb-3 md:mb-0 shadow-sm transition-all duration-300 hover:-translate-y-1 cursor-pointer ${glowClass}`}
+                    className={`group relative overflow-hidden glass-card rounded-2xl p-4 mb-3 md:mb-0 shadow-sm transition-all duration-300 hover:-translate-y-1 cursor-pointer ${glowClass}`}
                 >
                     <div className={`absolute inset-0 bg-gradient-to-br ${trendGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 dark:opacity-0`}></div>
 
@@ -1030,8 +1030,8 @@
                             </div>
 
                             <div>
-                                <h3 className="font-bold text-gray-800 dark:text-white text-sm sm:text-base leading-tight">{title}</h3>
-                                <span className="text-[10px] sm:text-xs text-gray-400 font-mono font-medium tracking-wide">{code}</span>
+                                <h3 className="font-bold text-gray-800 dark:text-white text-base leading-tight">{title}</h3>
+                                <span className="text-xs text-gray-400 font-mono font-medium tracking-wide">{code}</span>
                             </div>
                         </div>
 
@@ -1044,20 +1044,20 @@
                     </div>
 
                     <div className="relative z-10 grid grid-cols-2 gap-3">
-                        <div className="flex flex-col p-2 sm:p-2.5 rounded-xl bg-gray-50 dark:bg-gray-700/30 border border-gray-100 dark:border-gray-700/50 group-hover:bg-white dark:group-hover:bg-gray-700 transition-colors">
+                        <div className="flex flex-col p-2.5 rounded-xl bg-gray-50 dark:bg-gray-700/30 border border-gray-100 dark:border-gray-700/50 group-hover:bg-white dark:group-hover:bg-gray-700 transition-colors">
                             <span className="text-[10px] text-gray-400 font-medium mb-1 flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-red-400"></span> مبيع
                             </span>
-                            <span className={`text-[16px] sm:text-lg font-black num-en tracking-tight ${isDown ? 'text-rose-500' : 'text-gray-800 dark:text-white'}`}>
+                            <span className={`text-lg font-black num-en tracking-tight ${isDown ? 'text-rose-500' : 'text-gray-800 dark:text-white'}`}>
                                 {isUsd ? '$ ' : ''}{parseFloat(sell).toLocaleString('en-US', { maximumFractionDigits: 3 })}
                             </span>
                         </div>
 
-                        <div className="flex flex-col p-2 sm:p-2.5 rounded-xl bg-gray-50 dark:bg-gray-700/30 border border-gray-100 dark:border-gray-700/50 group-hover:bg-white dark:group-hover:bg-gray-700 transition-colors">
+                        <div className="flex flex-col p-2.5 rounded-xl bg-gray-50 dark:bg-gray-700/30 border border-gray-100 dark:border-gray-700/50 group-hover:bg-white dark:group-hover:bg-gray-700 transition-colors">
                             <span className="text-[10px] text-gray-400 font-medium mb-1 flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> شراء
                             </span>
-                            <span className={`text-[16px] sm:text-lg font-black num-en tracking-tight ${isUp ? 'text-emerald-500' : 'text-brand-primary'}`}>
+                            <span className={`text-lg font-black num-en tracking-tight ${isUp ? 'text-emerald-500' : 'text-brand-primary'}`}>
                                 {isUsd ? '$ ' : ''}{parseFloat(buy).toLocaleString('en-US', { maximumFractionDigits: 3 })}
                             </span>
                         </div>
@@ -1654,26 +1654,7 @@
             }, []);
             useEffect(() => { if (goldData.length > 0 && !selectedGoldId) setSelectedGoldId(goldData[0].id || goldData[0].description); }, [goldData]);
 
-            useEffect(() => {
-                if (goldData.length > 0 && pinnedGold.length === 0 && !localStorage.getItem('pinnedGold')) {
-                    const findItem = (pattern) => goldData.find(g => g.description.includes(pattern));
 
-                    const ounce = findItem('أونصة') || findItem('Ounce');
-                    const k24 = findItem('24');
-                    const k21 = findItem('21');
-                    const k18 = findItem('18');
-
-                    const priorityItems = [ounce, k24, k21, k18].filter(Boolean);
-                    const priorityDescs = priorityItems.map(g => g.description);
-                    const otherItems = goldData.filter(g => !priorityDescs.includes(g.description));
-
-                    const allGoldDescs = [...priorityItems, ...otherItems].map(g => g.description);
-
-                    if (allGoldDescs.length > 0) {
-                        setPinnedGold(allGoldDescs);
-                    }
-                }
-            }, [goldData]);
 
             useEffect(() => {
                 if (calcSource) {
@@ -1724,25 +1705,38 @@
                 setCurrencyData(enrichedCurrencies);
                 setGoldData(enrichedGold);
 
+                // --- Default pinned gold if first time (Home Shortcut) ---
+                if (enrichedGold.length > 0 && !localStorage.getItem('pinnedGold')) {
+                    const patterns = [
+                        g => g.description.includes('أونصة') || g.description.includes('اونصة') || g.description.includes('Ounce'),
+                        g => g.description.includes('24'),
+                        g => g.description.includes('21'),
+                        g => g.description.includes('18')
+                    ];
+
+                    const defaultPinned = [];
+                    patterns.forEach(pattern => {
+                        const item = enrichedGold.find(pattern);
+                        if (item && !defaultPinned.includes(item.description)) {
+                            defaultPinned.push(item.description);
+                        }
+                    });
+
+                    if (defaultPinned.length > 0) {
+                        setPinnedGold(defaultPinned);
+                    }
+                }
+
                 setGoldOrder(prevOrder => {
                     const currentDescriptions = enrichedGold.map(g => g.description);
                     let validOrder = prevOrder.filter(d => currentDescriptions.includes(d));
-
-                    if (validOrder.length === 0) {
-                        // First time or empty, define full ordered list
-                        const findDesc = (pattern) => currentDescriptions.find(d => d.includes(pattern));
-                        const ounce = findDesc('أونصة') || findDesc('Ounce');
-                        const k24 = findDesc('24');
-                        const k21 = findDesc('21');
-                        const k18 = findDesc('18');
-
-                        const priority = [ounce, k24, k21, k18].filter(Boolean);
-                        const others = currentDescriptions.filter(d => !priority.includes(d));
-                        return [...priority, ...others];
-                    }
-
                     const newItems = currentDescriptions.filter(d => !validOrder.includes(d));
-                    return [...validOrder, ...newItems];
+                    const ounceItem = newItems.find(d => d.includes('أونصة') || d.includes('Ounce'));
+                    const otherNewItems = newItems.filter(d => d !== ounceItem);
+                    let finalOrder = [...validOrder];
+                    if (ounceItem) finalOrder.unshift(ounceItem);
+                    finalOrder = [...finalOrder, ...otherNewItems];
+                    return finalOrder;
                 });
 
                 const defaultCalcGold = enrichedGold.find(g => !g.description.includes('أونصة') && !g.description.includes('Ounce'));
