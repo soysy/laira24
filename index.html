@@ -1661,9 +1661,11 @@
                     const k21 = goldData.find(g => g.description.includes('21'));
                     const k18 = goldData.find(g => g.description.includes('18'));
 
-                    const defaultPinned = [ounce, k24, k21, k18]
-                        .filter(Boolean)
-                        .map(g => g.description);
+                    const prioritySet = [ounce, k24, k21, k18].filter(Boolean);
+                    const others = goldData.filter(g => !prioritySet.includes(g));
+                    const allGold = [...prioritySet, ...others];
+
+                    const defaultPinned = allGold.map(g => g.description);
 
                     if (defaultPinned.length > 0) {
                         setPinnedGold(defaultPinned);
@@ -1724,12 +1726,19 @@
                     const currentDescriptions = enrichedGold.map(g => g.description);
                     let validOrder = prevOrder.filter(d => currentDescriptions.includes(d));
                     const newItems = currentDescriptions.filter(d => !validOrder.includes(d));
-                    const ounceItem = newItems.find(d => d.includes('أونصة') || d.includes('Ounce'));
-                    const otherNewItems = newItems.filter(d => d !== ounceItem);
-                    let finalOrder = [...validOrder];
-                    if (ounceItem) finalOrder.unshift(ounceItem);
-                    finalOrder = [...finalOrder, ...otherNewItems];
-                    return finalOrder;
+
+                    if (newItems.length === 0) return validOrder;
+
+                    // العثور على العناصر المطلوبة بالترتيب
+                    const ounce = newItems.find(d => d.includes('أونصة') || d.includes('Ounce'));
+                    const k24 = newItems.find(d => d.includes('24'));
+                    const k21 = newItems.find(d => d.includes('21'));
+                    const k18 = newItems.find(d => d.includes('18'));
+
+                    const priority = [ounce, k24, k21, k18].filter(Boolean);
+                    const others = newItems.filter(d => !priority.includes(d));
+
+                    return [...validOrder, ...priority, ...others];
                 });
 
                 const defaultCalcGold = enrichedGold.find(g => !g.description.includes('أونصة') && !g.description.includes('Ounce'));
